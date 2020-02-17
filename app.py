@@ -6,8 +6,8 @@ def add_std(self, *args, value="", editable=False, begin_entry_at=30, **kwargs):
     self.add(npyscreen.TitleText, *args, value=value, editable=editable, begin_entry_at=begin_entry_at ,**kwargs)
 npyscreen.Form.add_std = add_std
 
-from Forms.main_form import main_form
-from Forms.place_holder_form import place_holder_form
+from forms.main_form import main_form
+from forms.place_holder_form import place_holder_form
 
 class App(npyscreen.NPSAppManaged):
     def onStart(self):
