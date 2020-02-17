@@ -1,29 +1,6 @@
-#!/usr/bin/env python
-# encoding: utf-8
-
 import npyscreen
 
-def add_std(self, *args, value="", editable=False, begin_entry_at=30, **kwargs):
-    self.add(npyscreen.TitleText, *args, value=value, editable=editable, begin_entry_at=begin_entry_at ,**kwargs)
-
-npyscreen.Form.add_std = add_std
-
-class App(npyscreen.NPSAppManaged):
-    def onStart(self):
-        self.addForm("MAIN", MainForm)
-        self.addForm("PlaceHolderForm", PlaceHolderForm)
-
-class PlaceHolderForm(npyscreen.ActionForm):
-    def create(self):
-        self.add_std(npyscreen.TitleText, name="This is a sample Form. Click OK to go back")
-
-    def on_ok(self):
-        self.parentApp.switchFormPrevious()
-
-    def on_cancel(self):
-        self.on_ok()
-
-class MainForm(npyscreen.FormWithMenus):
+class main_form(npyscreen.FormWithMenus):
     def create(self):
         self.how_exited_handers[npyscreen.wgwidget.EXITED_ESCAPE] = self.exit_application
         self.ip_selected = self.add_std(name="IP addresses Selected:")
@@ -94,9 +71,3 @@ class MainForm(npyscreen.FormWithMenus):
         self.parentApp.switchFormNow()
 
 
-def main():
-    TA = App()
-    TA.run()
-
-if __name__ == '__main__':
-    main()
