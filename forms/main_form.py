@@ -1,4 +1,9 @@
 import npyscreen
+import art
+from npyscreen import utilNotify
+
+REMOTE_HOSTS = "Remote Hosts"
+MODULES = "Modules"
 
 class main_form(npyscreen.FormWithMenus):
     def create(self):
@@ -8,11 +13,10 @@ class main_form(npyscreen.FormWithMenus):
         self.module_availiable = self.add_std(name="Modules available")
         self.op_supported = self.add_std(name="Operating Systems Supported")
 
-
         self.m1 = self.add_menu(name="Menu", shortcut="H" )
 
 
-        self.hosts_menu = self.m1.addNewSubmenu(name="Remote Hosts", shortcut="H", )
+        self.hosts_menu = self.m1.addNewSubmenu(name=REMOTE_HOSTS, shortcut="H", )
         self.hosts_menu.addItemsFromList([
             ("Generate New Host", self.switch_to_modules),
             ("Edit Existing Host", self.switch_to_modules),
@@ -22,7 +26,7 @@ class main_form(npyscreen.FormWithMenus):
             ("Select Existing Group", self.switch_to_modules),
         ])
 
-        self.modules_menu = self.m1.addNewSubmenu(name="Select Module", shortcut="M", )
+        self.modules_menu = self.m1.addNewSubmenu(name=MODULES, shortcut="M", )
         self.http = self.modules_menu.addNewSubmenu(name="HTTP", shortcut="H", )
         self.http.addItemsFromList([
             ("Module 1", self.module_placeholder),
@@ -61,8 +65,21 @@ class main_form(npyscreen.FormWithMenus):
     def run_module(self):
         pass
 
+
     def display_help_msg(self):
-        pass
+
+        help_msg = f"""{art.text2art("UBNetDef", "random")}
+Welcome to Deployer!
+Deployer is a multi stage application that allows the user to deploy a preset modules on remote hosts using availiable methods like SSH(Linux), HTTP(WebApps), and WINRM(Windows).
+To start using Deployer follow the steps below:
+1. Select the Host(s) from {REMOTE_HOSTS} menu. If no Hosts are defined, generate a new Host under {REMOTE_HOSTS} menu.
+2. Once the Host(s) selected, navigate back to menu and select the desired Module from {MODULES} menu.
+3. Evaluate the selected Module and selected Hosts(s) on the main screen.
+4. Use Run button to run the desired module on a selected host.
+"""
+        from npyscreen.fmPopup import PopupWide
+        PopupWide.DEFAULT_LINES = int(len(help_msg.splitlines())*1.2)
+        npyscreen.notify_confirm(help_msg, title="Help", wide=True, editw=1)
 
     def switch_to_modules(self):
         self.modules_menu.enabled = True
