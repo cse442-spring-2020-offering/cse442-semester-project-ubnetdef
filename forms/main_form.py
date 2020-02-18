@@ -13,10 +13,10 @@ class main_form(npyscreen.FormWithMenus):
         self.module_availiable = self.add_std(name="Modules available")
         self.op_supported = self.add_std(name="Operating Systems Supported")
 
-        self.m1 = self.add_menu(name="Menu", shortcut="H" )
+        self.m1 = self.add_menu(name="Menu")
 
 
-        self.hosts_menu = self.m1.addNewSubmenu(name=REMOTE_HOSTS, shortcut="H", )
+        self.hosts_menu = self.m1.addNewSubmenu(name=REMOTE_HOSTS, shortcut="H")
         self.hosts_menu.addItemsFromList([
             ("Generate New Host", self.switch_to_modules),
             ("Edit Existing Host", self.switch_to_modules),
@@ -50,8 +50,8 @@ class main_form(npyscreen.FormWithMenus):
 
         self.m1.addItemsFromList([
             ("Run", self.run_module, "R"),
-            ("Help", self.display_help_msg, "^H"),
             ("Quit", self.exit_application, "Q"),
+            ("Help", self.display_help_msg),
         ])
 
     def module_placeholder(self):
