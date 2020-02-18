@@ -15,15 +15,14 @@ class main_form(npyscreen.FormWithMenus):
 
         self.m1 = self.add_menu(name="Menu")
 
-
         self.hosts_menu = self.m1.addNewSubmenu(name=REMOTE_HOSTS, shortcut="H")
         self.hosts_menu.addItemsFromList([
-            ("Generate New Host", self.switch_to_modules),
-            ("Edit Existing Host", self.switch_to_modules),
-            ("Select Host(s)", self.switch_to_modules),
-            ("Create New Group", self.switch_to_modules),
-            ("Edit Existing Group", self.switch_to_modules),
-            ("Select Existing Group", self.switch_to_modules),
+            ("Add New Host", self.switch_to_form, None, None, ("AddHosts",)),
+            ("Edit Existing Host", self.switch_to_form,),
+            ("Select Host(s)", self.switch_to_form),
+            ("Create New Group", self.switch_to_form),
+            ("Edit Existing Group", self.switch_to_form),
+            ("Select Existing Group", self.switch_to_form),
         ])
 
         self.modules_menu = self.m1.addNewSubmenu(name=MODULES, shortcut="M", )
@@ -81,9 +80,9 @@ To start using Deployer follow the steps below:
         PopupWide.DEFAULT_LINES = int(len(help_msg.splitlines())*1.2)
         npyscreen.notify_confirm(help_msg, title="Help", wide=True, editw=1)
 
-    def switch_to_modules(self):
+    def switch_to_form(self, argument="PlaceHolderForm"):
         self.modules_menu.enabled = True
-        self.parentApp.setNextForm("PlaceHolderForm")
+        self.parentApp.setNextForm(argument)
         self.editing = False
         self.parentApp.switchFormNow()
 
