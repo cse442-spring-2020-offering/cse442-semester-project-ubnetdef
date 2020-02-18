@@ -1,0 +1,12 @@
+import npyscreen
+class select_group(npyscreen.ActionForm):
+    def create(self):
+        self.add(npyscreen.TitleText, name="Please select a group", value="", editable=False, begin_entry_at=70,)
+        self.add(npyscreen.SelectOne, max_height=4, value = [1,],
+                values = ["Group1","Group2","Group3"], scroll_exit=True, width=30)
+
+    def on_ok(self):
+        self.parentApp.switchFormPrevious()
+
+    def on_cancel(self):
+        self.on_ok()
