@@ -1,7 +1,9 @@
 import npyscreen
-class add_hosts(npyscreen.ActionForm):
+
+
+class AddHosts(npyscreen.ActionForm):
     def create(self):
-        self.OK_BUTTON_TEXT = "Save"
+        self.OK_BUTTON_TEXT = SAVE_BUTTON_TEXT
         self.add(npyscreen.TitleText, name="Please fill in following information:", value="", editable=False, begin_entry_at=70,)
         self.add(npyscreen.TitleText, name="Comma separated resolvable hostname, or ip address.", value="X.X.X.X,", editable=True, begin_entry_at=70)
         self.add(npyscreen.TitleText, name="Username (Usually SSH/WINRM)", value="", editable=True, begin_entry_at=70)

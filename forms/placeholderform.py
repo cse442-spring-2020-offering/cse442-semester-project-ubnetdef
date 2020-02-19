@@ -1,5 +1,7 @@
 import npyscreen
-class place_holder_form(npyscreen.ActionForm):
+
+
+class PlaceHolderForm(npyscreen.ActionForm):
     def create(self):
         self.add_std(npyscreen.TitleText, name="This is a sample Form. Click OK to go back")
 
