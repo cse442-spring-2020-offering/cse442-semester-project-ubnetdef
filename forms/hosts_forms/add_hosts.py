@@ -5,7 +5,7 @@ class add_hosts(npyscreen.ActionForm):
         self.add(npyscreen.TitleText, name="Please fill in following information:", value="", editable=False, begin_entry_at=70,)
         self.add(npyscreen.TitleText, name="Comma separated resolvable hostname, or ip address.", value="X.X.X.X,", editable=True, begin_entry_at=70)
         self.add(npyscreen.TitleText, name="Username (Usually SSH/WINRM)", value="", editable=True, begin_entry_at=70)
-        self.add(npyscreen.TitleText, name="Password (Usually SSH/WINRM)", value="", editable=True, begin_entry_at=70)
+        self.add(npyscreen.TitlePassword, name="Password (Usually SSH/WINRM)", value="", editable=True, begin_entry_at=70)
         self.add(npyscreen.TitleText, name="Additional Arguments could be added here using json format:", value="", editable=False, begin_entry_at=70)
         self.add(npyscreen.MultiLineEditableBoxed,
                         max_height=10,
