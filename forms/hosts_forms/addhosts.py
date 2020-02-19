@@ -1,5 +1,5 @@
 import npyscreen
-
+from overrides.constants import *
 
 class AddHosts(npyscreen.ActionForm):
     def create(self):
