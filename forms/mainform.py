@@ -1,11 +1,10 @@
 import npyscreen
 import art
 from npyscreen import utilNotify
+from overrides.constants import *
 
-REMOTE_HOSTS = "Remote Hosts"
-MODULES = "Modules"
 
-class main_form(npyscreen.FormWithMenus):
+class MainForm(npyscreen.FormWithMenus):
     def create(self):
         self.how_exited_handers[npyscreen.wgwidget.EXITED_ESCAPE] = self.exit_application
         self.ip_selected = self.add_std(name="IP addresses Selected:")
@@ -13,16 +12,16 @@ class main_form(npyscreen.FormWithMenus):
         self.module_availiable = self.add_std(name="Modules available")
         self.op_supported = self.add_std(name="Operating Systems Supported")
 
-        self.m1 = self.add_menu(name="Menu")
+        self.m1 = self.add_menu(name=MAIN_MENU_TITLE)
 
         self.hosts_menu = self.m1.addNewSubmenu(name=REMOTE_HOSTS, shortcut="^H")
         self.hosts_menu.addItemsFromList([
-            ("Add New Host", self.switch_to_form, None, None, ("AddHosts",)),
+            ("Add New Host", self.switch_to_form, None, None, (ADD_HOSTS,)),
             ("Edit Existing Host", self.switch_to_form),
-            ("Select Host(s)", self.switch_to_form, None, None, ("SelectHosts",)),
-            ("Add New Group", self.switch_to_form, None, None, ("AddGroup",)),
+            ("Select Host(s)", self.switch_to_form, None, None, (SELECTED_HOSTS,)),
+            ("Add New Group", self.switch_to_form, None, None, (ADD_GROUP,)),
             ("Edit Existing Group", self.switch_to_form),
-            ("Select Existing Group", self.switch_to_form, None, None, ("SelectGroup",)),
+            ("Select Existing Group", self.switch_to_form, None, None, (SELECTED_GROUP,)),
         ])
 
         self.modules_menu = self.m1.addNewSubmenu(name=MODULES, shortcut="^M", )
@@ -71,7 +70,7 @@ class main_form(npyscreen.FormWithMenus):
     def display_help_msg(self):
 
         help_msg = f"""{art.text2art("UBNetDef", "random")}
-Welcome to Deployer!
+Welcome to {AP_NAME}!
 Deployer is a multi stage application that allows the user to deploy a preset modules on remote hosts using availiable methods like SSH(Linux), HTTP(WebApps), and WINRM(Windows).
 To start using Deployer follow the steps below:
 1. Select the Host(s) from {REMOTE_HOSTS} menu. If no Hosts are defined, generate a new Host under {REMOTE_HOSTS} menu.
@@ -83,7 +82,7 @@ To start using Deployer follow the steps below:
         PopupWide.DEFAULT_LINES = int(len(help_msg.splitlines())*1.2)
         npyscreen.notify_confirm(help_msg, title="Help", wide=True, editw=1)
 
-    def switch_to_form(self, argument="PlaceHolderForm"):
+    def switch_to_form(self, argument=PLACEHOLDER_FORM):
         self.modules_menu.enabled = True
         self.parentApp.setNextForm(argument)
         self.editing = False
