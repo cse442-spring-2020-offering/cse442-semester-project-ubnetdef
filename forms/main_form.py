@@ -15,7 +15,7 @@ class main_form(npyscreen.FormWithMenus):
 
         self.m1 = self.add_menu(name="Menu")
 
-        self.hosts_menu = self.m1.addNewSubmenu(name=REMOTE_HOSTS, shortcut="H")
+        self.hosts_menu = self.m1.addNewSubmenu(name=REMOTE_HOSTS, shortcut="^H")
         self.hosts_menu.addItemsFromList([
             ("Add New Host", self.switch_to_form, None, None, ("AddHosts",)),
             ("Edit Existing Host", self.switch_to_form),
@@ -25,33 +25,36 @@ class main_form(npyscreen.FormWithMenus):
             ("Select Existing Group", self.switch_to_form, None, None, ("SelectGroup",)),
         ])
 
-        self.modules_menu = self.m1.addNewSubmenu(name=MODULES, shortcut="M", )
-        self.http = self.modules_menu.addNewSubmenu(name="HTTP", shortcut="H", )
+        self.modules_menu = self.m1.addNewSubmenu(name=MODULES, shortcut="^M", )
+        self.http = self.modules_menu.addNewSubmenu(name="HTTP", shortcut="^H", )
         self.http.addItemsFromList([
-            ("Module 1", self.module_placeholder),
-            ("Module 2", self.module_placeholder),
-            ("Module 3", self.module_placeholder),
+            ("Module 1", self.module_selector, None, None, ("HTTP","Module 1",)),
+            ("Module 2", self.module_selector, None, None, ("HTTP","Module 2",)),
+            ("Module 3", self.module_selector, None, None, ("HTTP","Module 3",)),
         ])
-        self.ssh = self.modules_menu.addNewSubmenu(name="SSH", shortcut="S", )
+        self.ssh = self.modules_menu.addNewSubmenu(name="SSH", shortcut="^S", )
         self.ssh.addItemsFromList([
-            ("Module 1", self.module_placeholder),
-            ("Module 2", self.module_placeholder),
-            ("Module 3", self.module_placeholder),
+            ("Module 1", self.module_selector, None, None, ("SSH","Module 1",)),
+            ("Module 2", self.module_selector, None, None, ("SSH","Module 2",)),
+            ("Module 3", self.module_selector, None, None, ("SSH","Module 3",)),
         ])
-        self.winrm = self.modules_menu.addNewSubmenu(name="WINRM", shortcut="W", )
+        self.winrm = self.modules_menu.addNewSubmenu(name="WINRM", shortcut="^W", )
         self.winrm.addItemsFromList([
-            ("Module 1", self.module_placeholder),
-            ("Module 2", self.module_placeholder),
-            ("Module 3", self.module_placeholder),
+            ("Module 1", self.module_selector, None, None, ("WINRM","Module 1",)),
+            ("Module 2", self.module_selector, None, None, ("WINRM","Module 2",)),
+            ("Module 3", self.module_selector, None, None, ("WINRM","Module 3",)),
         ])
         self.modules_menu.enabled = False
 
 
         self.m1.addItemsFromList([
-            ("Run", self.run_module, "R"),
-            ("Quit", self.exit_application, "Q"),
+            ("Run", self.run_module, "^R"),
+            ("Quit", self.exit_application, "^Q"),
             ("Help", self.display_help_msg),
         ])
+
+    def module_selector(self, method, module):
+        self.module_selected.set_value(f"{method}/{module}")
 
     def module_placeholder(self):
         pass
