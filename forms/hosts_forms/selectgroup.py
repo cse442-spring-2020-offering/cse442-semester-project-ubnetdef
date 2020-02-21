@@ -2,9 +2,11 @@ import npyscreen
 
 
 class SelectGroup(npyscreen.ActionForm):
+
+
     def create(self):
-        self.add(npyscreen.TitleText, name="Please select a group", value="", editable=False, begin_entry_at=70, )
-        self.add(npyscreen.SelectOne, max_height=4, value=[1, ],
+        self.select_group_title = self.add(npyscreen.TitleText, name="Please select a group", value="", editable=False, begin_entry_at=70, )
+        self.group_selected = self.add(npyscreen.SelectOne, max_height=4,
                  values=["Group1", "Group2", "Group3"], scroll_exit=True, width=30)
 
     def on_ok(self):
