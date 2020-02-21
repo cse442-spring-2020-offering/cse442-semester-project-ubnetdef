@@ -15,11 +15,11 @@ class EditHosts(AddHosts, SelectHosts):
         self.deleteHosts.hidden = True
         self.select_hosts_title = True
         self.add_hosts_title.hidden = True
-        self.add_hosts_title2.hidden= True
-        self.add_hosts_title3.hidden= True
-        self.add_hosts_title4.hidden= True
+        self.add_hosts_ip_addresses.hidden= True
+        self.add_hosts_username.hidden= True
+        self.add_hosts_optional_args_title.hidden= True
         self.add_hosts_password.hidden= True
-        self.add_hosts_json.hidden=True
+        self.add_hosts_args.hidden=True
 
     def show_edit_delete_screen(self):
         self.confirmButton.hidden = True
@@ -28,11 +28,11 @@ class EditHosts(AddHosts, SelectHosts):
         self.deleteHosts.hidden = False
         self.select_hosts_title = False
         self.add_hosts_title.hidden = False
-        self.add_hosts_title2.hidden= False
-        self.add_hosts_title3.hidden= False
-        self.add_hosts_title4.hidden= False
+        self.add_hosts_ip_addresses.hidden= False
+        self.add_hosts_username.hidden= False
+        self.add_hosts_optional_args_title.hidden= False
         self.add_hosts_password.hidden= False
-        self.add_hosts_json.hidden= False
+        self.add_hosts_args.hidden= False
         self.DISPLAY()
 
 
