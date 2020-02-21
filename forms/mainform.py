@@ -17,10 +17,10 @@ class MainForm(npyscreen.FormWithMenus):
         self.hosts_menu = self.m1.addNewSubmenu(name=REMOTE_HOSTS, shortcut="^H")
         self.hosts_menu.addItemsFromList([
             ("Add New Host", self.switch_to_form, None, None, (ADD_HOSTS,)),
-            ("Edit Existing Host", self.switch_to_form),
+            ("Edit Existing Host", self.switch_to_form, None, None, (EDIT_HOSTS,)),
             ("Select Host(s)", self.switch_to_form, None, None, (SELECTED_HOSTS,)),
             ("Add New Group", self.switch_to_form, None, None, (ADD_GROUP,)),
-            ("Edit Existing Group", self.switch_to_form),
+            ("Edit Existing Group", self.switch_to_form, None, None, (EDIT_GROUP,)),
             ("Select Existing Group", self.switch_to_form, None, None, (SELECTED_GROUP,)),
         ])
 
