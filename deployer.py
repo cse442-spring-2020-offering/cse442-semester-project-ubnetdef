@@ -8,7 +8,7 @@ from forms.hosts_forms.addgroup import AddGroup
 from forms.hosts_forms.selecthosts import SelectHosts
 from forms.hosts_forms.selectgroup import SelectGroup
 from forms.hosts_forms.edit_existing_group import EditGroup
-from forms.hosts_forms.edit_existing_group import EditHosts
+from forms.hosts_forms.edit_existing_hosts import EditHosts
 
 
 
@@ -21,8 +21,6 @@ class App(npyscreen.NPSAppManaged):
         self.addForm(SELECTED_GROUP, SelectGroup)
         self.addForm(PLACEHOLDER_FORM, PlaceHolderForm)
         self.addForm(EDIT_HOSTS, EditHosts)
-
-
         self.addForm(EDIT_GROUP, EditGroup)
 
 
