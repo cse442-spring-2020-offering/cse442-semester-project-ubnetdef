@@ -6,3 +6,4 @@ before_script: pip install -r requirements.txt
 
 script:
   - pytest
+  - python tests/test_launch_application.py
