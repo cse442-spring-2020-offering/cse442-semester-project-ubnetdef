@@ -1,0 +1,7 @@
+{
+  "os": ["Ubuntu", "RedHat"],
+  "distribution":
+  {
+    "RedHat": ["CentOS"]
+  }
+}
