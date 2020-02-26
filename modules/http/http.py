@@ -1,0 +1,2 @@
+class ConnectionHTTP():
+    pass
