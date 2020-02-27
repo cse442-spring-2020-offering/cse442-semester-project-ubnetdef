@@ -13,7 +13,6 @@ class MainForm(npyscreen.FormWithMenus):
         self.op_supported = self.add_std(name="Operating Systems Supported")
 
         self.m1 = self.add_menu(name=MAIN_MENU_TITLE)
-
         self.hosts_menu = self.m1.addNewSubmenu(name=REMOTE_HOSTS, shortcut="^H")
         self.hosts_menu.addItemsFromList([
             ("Add New Host", self.switch_to_form, None, None, (ADD_HOSTS,)),
@@ -45,12 +44,24 @@ class MainForm(npyscreen.FormWithMenus):
         ])
         self.modules_menu.enabled = False
 
+        self.profile_menu = self.m1.addNewSubmenu(name=PROFILE)
+
+        self.profile_menu.addItemsFromList([
+            ("Select Profile", self.select_profile, None, None),
+            ("Save Profile", self.save_profile, None, None),
+        ])
 
         self.m1.addItemsFromList([
             ("Run", self.run_module, "^R"),
             ("Quit", self.exit_application, "^Q"),
             ("Help", self.display_help_msg),
         ])
+
+    def select_profile(self):
+        pass
+
+    def save_profile(self):
+        pass
 
     def module_selector(self, method, module):
         self.module_selected.set_value(f"{method}/{module}")
