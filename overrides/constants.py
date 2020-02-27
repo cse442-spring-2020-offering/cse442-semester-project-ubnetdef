@@ -12,20 +12,10 @@ REMOTE_HOSTS = "Remote Hosts"
 MODULES = "Modules"
 MAIN_MENU_TITLE = "Menu"
 SAVE_BUTTON_TEXT = "Save"
-EDIT_HOSTS = "EditHosts"
-EDIT_GROUP = "EditGroup"
 
 SAVE_PROFILE = "SaveProfile"
 SELECT_PROFILE = "SelectProfile"
 
-
-METHOD = None
-HOSTS = None
-
-HOSTS_CONFIG = None
-GROUPS_CONFIG = None
-PROFILE_CONFIG = None
-CHANGES_PENDING = False
 
 list_of_method_subfolders = [file for file in os.scandir(os.path.join(ROOT_DIR, 'modules')) if file.is_dir()]
 list_of_method_names = []
@@ -44,4 +34,7 @@ profiles_properties = {}
 for file in list_of_profiles_subfolders:
     list_of_profile_names.append(file.name)
     with open(os.path.join(file, 'config.json')) as f:
-        profiles_properties[file.name] = json.loads(f.read())
+        try:
+            profiles_properties[file.name] = json.loads(f.read())
+        except json.decoder.JSONDecodeError:
+            continue
