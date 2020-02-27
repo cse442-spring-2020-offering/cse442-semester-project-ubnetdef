@@ -1,6 +1,8 @@
 import npyscreen
 import art
 from npyscreen import utilNotify
+import overrides.shared_variables as sv
+import overrides.constants
 from overrides.constants import *
 from forms.selectmodule import SelectModule
 from forms.hosts_forms.addhosts import AddHosts
@@ -8,8 +10,6 @@ from forms.placeholderform import PlaceHolderForm
 from forms.hosts_forms.addgroup import AddGroup
 from forms.hosts_forms.selecthosts import SelectHosts
 from forms.hosts_forms.selectgroup import SelectGroup
-from forms.hosts_forms.edit_existing_group import EditGroup
-from forms.hosts_forms.edit_existing_hosts import EditHosts
 from forms.saveprofile import SaveProfile
 from forms.selectprofile import SelectProfile
 
@@ -25,12 +25,10 @@ class MainForm(npyscreen.FormWithMenus):
         self.m1 = self.add_menu(name=MAIN_MENU_TITLE)
         self.hosts_menu = self.m1.addNewSubmenu(name=REMOTE_HOSTS, shortcut="^H")
         self.hosts_menu.addItemsFromList([
-            ("Add New Host", self.switch_to_form, None, None, (ADD_HOSTS, AddHosts,)),
-            ("Edit Existing Host", self.switch_to_form, None, None, (EDIT_HOSTS, EditHosts)),
-            ("Select Host(s)", self.switch_to_form, None, None, (SELECTED_HOSTS, SelectHosts,)),
-            ("Add New Group", self.switch_to_form, None, None, (ADD_GROUP, AddGroup,)),
-            ("Edit Existing Group", self.switch_to_form, None, None, (EDIT_GROUP, EditGroup,)),
-            ("Select Existing Group", self.switch_to_form, None, None, (SELECTED_GROUP, SelectGroup,)),
+            ("Add Or Edit Host", self.switch_to_form, None, None, (ADD_HOSTS, AddHosts,)),
+            ("Select Host(s)", self.select_host),
+            ("Add Or Edit Group", self.add_group),
+            ("Select Existing Group", self.select_group),
         ])
         self.m1.addItemsFromList([
             ("Modules", self.module_selector),
@@ -44,9 +42,32 @@ class MainForm(npyscreen.FormWithMenus):
     def form_exists_in_application(self, id):
         return id in self.parentApp._Forms
 
+    def no_hosts_created_alert(self):
+        npyscreen.notify_confirm(f"No Hosts were created. Please add Hosts to continue",
+                                 title="Information Missing/Incorrect", wide=True, editw=1)
+    def add_group(self):
+        if len(sv.HOSTS_CONFIG.keys()) != 0:
+            self.switch_to_form(ADD_GROUP, AddGroup)
+        else:
+            self.no_hosts_created_alert()
+
+
+    def select_host(self):
+        if len(sv.HOSTS_CONFIG.keys()) != 0:
+            self.switch_to_form(SELECTED_HOSTS, SelectHosts)
+        else:
+            self.no_hosts_created_alert()
+
+    def select_group(self):
+        if len(sv.HOSTS_CONFIG.keys()) != 0 and len(sv.GROUPS_CONFIG.keys()) != 0:
+            self.switch_to_form(SELECTED_GROUP, SelectGroup)
+        else:
+            npyscreen.notify_confirm(f"No Hosts or Groups were created. Please add Host(s) and Group(s) to continue",
+                                 title="Information Missing/Incorrect", wide=True, editw=1)
+
     def select_profile(self):
         response = True
-        if CHANGES_PENDING or HOSTS_CONFIG is not None or GROUPS_CONFIG is not None:
+        if overrides.constants.CHANGES_PENDING:
             response = npyscreen.notify_ok_cancel(
                 "You have unsaved changes in hosts configuration, or groups configuration",
                 title="Information Missing/Incorrect\nWould you like to switch profiles before saving current profile?",
@@ -55,12 +76,13 @@ class MainForm(npyscreen.FormWithMenus):
             self.switch_to_form(SELECT_PROFILE, SelectProfile)
 
     def module_selector(self):
-        if METHOD is not None:
+        if sv.SELECTIONS:
             self.switch_to_form(MODULES, SelectModule)
         else:
             npyscreen.notify_confirm(
-                "Either No Hosts were selected, or selected Host do not have a common deployment method",
-                title="Information Missing/Incorrect", wide=True, editw=1)
+                "No Hosts/Group were selected. Please go to Hosts Menu, to select hosts or a group",
+                title="No Hosts/Group Selected", wide=True, editw=1)
+
 
         # self.module_selected.set_value(f"{method}/{module}")
 
