@@ -4,7 +4,7 @@ from overrides.constants import *
 
 class SelectProfile(npyscreen.ActionForm):
     def create(self):
-        self.select_profile_title = self.add(npyscreen.TitleText, name="Please Select the profile to load", value="",
+        self.select_profile_title = self.add(npyscreen.TitleText, name="Please select a profile to load", value="",
                                              editable=False, begin_entry_at=70, )
         self.group_selected = self.add(npyscreen.SelectOne, max_width=80, max_height=4, values=[
             f"{profile}{' (Encrypted)' if profiles_properties[profile].get('encrypted') else ''}" for profile in
@@ -14,7 +14,7 @@ class SelectProfile(npyscreen.ActionForm):
                                          value="", editable=True, begin_entry_at=70, )
 
     def on_ok(self):
-        self.parentApp.switchFormPrevious()
+        pass
 
     def on_cancel(self):
-        self.on_ok()
+        self.parentApp.switchFormPrevious()
