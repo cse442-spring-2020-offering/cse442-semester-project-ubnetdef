@@ -67,7 +67,7 @@ class MainForm(npyscreen.FormWithMenus):
 
     def select_profile(self):
         response = True
-        if overrides.constants.CHANGES_PENDING:
+        if sv.CHANGES_PENDING:
             response = npyscreen.notify_ok_cancel(
                 "You have unsaved changes in hosts configuration, or groups configuration",
                 title="Information Missing/Incorrect\nWould you like to switch profiles before saving current profile?",

@@ -16,25 +16,27 @@ SAVE_BUTTON_TEXT = "Save"
 SAVE_PROFILE = "SaveProfile"
 SELECT_PROFILE = "SelectProfile"
 
+def load_methods_and_modules():
+    list_of_method_subfolders = [file for file in os.scandir(os.path.join(ROOT_DIR, 'modules')) if file.is_dir()]
+    list_of_method_names = []
+    method_to_module_map = {}
+    for file in list_of_method_subfolders:
+        list_of_method_names.append(file.name)
+        method_to_module_map[file.name] = []
+        for module in [file for file in os.scandir(os.path.join(ROOT_DIR, 'modules', file.name)) if file.is_dir()]:
+            method_to_module_map[file.name].append(module.name)
+load_methods_and_modules()
 
-list_of_method_subfolders = [file for file in os.scandir(os.path.join(ROOT_DIR, 'modules')) if file.is_dir()]
-list_of_method_names = []
-method_to_module_map = {}
 
-for file in list_of_method_subfolders:
-    list_of_method_names.append(file.name)
-    method_to_module_map[file.name] = []
-    for module in [file for file in os.scandir(os.path.join(ROOT_DIR, 'modules', file.name)) if file.is_dir()]:
-        method_to_module_map[file.name].append(module.name)
-
-list_of_profiles_subfolders = [file for file in os.scandir(os.path.join(ROOT_DIR, 'profiles')) if file.is_dir()]
-list_of_profile_names = []
-profiles_properties = {}
-
-for file in list_of_profiles_subfolders:
-    list_of_profile_names.append(file.name)
-    with open(os.path.join(file, 'config.json')) as f:
-        try:
-            profiles_properties[file.name] = json.loads(f.read())
-        except json.decoder.JSONDecodeError:
-            continue
+def load_profiles ():
+    list_of_profiles_subfolders = [file for file in os.scandir(os.path.join(ROOT_DIR, 'profiles')) if file.is_dir()]
+    list_of_profile_names = []
+    profiles_properties = {}
+    for file in list_of_profiles_subfolders:
+        list_of_profile_names.append(file.name)
+        with open(os.path.join(file, 'config.json')) as f:
+            try:
+                profiles_properties[file.name] = json.loads(f.read())
+            except json.decoder.JSONDecodeError:
+                continue
+load_profiles()

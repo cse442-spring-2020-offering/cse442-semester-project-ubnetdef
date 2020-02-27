@@ -50,11 +50,11 @@ class SaveProfile(npyscreen.ActionForm):
 
         if password is not None:
             with open(os.path.join(target_dir, 'groups.json'), 'wb') as f:
-                encoded_text = cipher_suite.encrypt(json.dumps(sv.GROUPS_CONFIG).encode())
+                encoded_text = cipher_suite.encrypt(json.dumps(sv.GROUPS_CONFIG).encode('utf-8'))
                 f.write(encoded_text)
 
             with open(os.path.join(target_dir, 'hosts.json'), 'wb') as f:
-                encoded_text = cipher_suite.encrypt(json.dumps(sv.HOSTS_CONFIG).encode())
+                encoded_text = cipher_suite.encrypt(json.dumps(sv.HOSTS_CONFIG).encode('utf-8'))
                 f.write(encoded_text)
 
         else:
