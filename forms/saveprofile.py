@@ -1,6 +1,9 @@
 import npyscreen
 import overrides.shared_variables as sv
 from overrides.constants import *
+import os
+from definitions import ROOT_DIR
+
 class SaveProfile(npyscreen.ActionForm):
     def create(self):
         self.OK_BUTTON_TEXT = SAVE_BUTTON_TEXT
@@ -70,7 +73,7 @@ class SaveProfile(npyscreen.ActionForm):
 
     def on_ok(self):
         if self.profile_name.value:
-            if self.profile_name.value in list_of_profile_names and not npyscreen.notify_yes_no(
+            if self.profile_name.value in sv.list_of_profile_names and not npyscreen.notify_yes_no(
                         f"Profile {self.profile_name.value} already exists, would you like to override?",
                         title="Already Exists", editw=1):
                 return
@@ -84,6 +87,8 @@ class SaveProfile(npyscreen.ActionForm):
             else:
                 self.create_profile(self.profile_name.value, password=self.profile_password.value, force=True)
                 npyscreen.notify_confirm("Profile Saved successfully!", wide=True, editw=1)
+
+            sv.load_profiles()
             sv.CHANGES_PENDING = False
             self.parentApp.switchFormPrevious()
         else:
