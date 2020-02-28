@@ -91,6 +91,7 @@ class SelectProfile(npyscreen.ActionForm):
                     return
             npyscreen.notify_confirm(f"Profile {profile} loaded successfully", wide=True, editw=1)
             sv.CHANGES_PENDING = False
+            self.parentApp.getForm('MAIN').reload_screen()
             self.parentApp.switchFormPrevious()
 
         else:

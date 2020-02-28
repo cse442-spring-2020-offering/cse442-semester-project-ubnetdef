@@ -117,6 +117,7 @@ class AddHosts(npyscreen.ActionForm):
                     sv.HOSTS_CONFIG[address]['password'] = self.add_hosts_password.value
                 if args:
                     sv.HOSTS_CONFIG[address]['args'] = args
+        self.parentApp.getForm('MAIN').reload_screen()
         self.parentApp.switchFormPrevious()
     def on_cancel(self):
         self.parentApp.switchFormPrevious()

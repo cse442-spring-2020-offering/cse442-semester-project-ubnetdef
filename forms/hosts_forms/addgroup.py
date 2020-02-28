@@ -19,12 +19,13 @@ class AddGroup(npyscreen.ActionForm):
                     npyscreen.notify_confirm("Hosts do not share common remoting method", wide=True, editw=1)
                     return
 
-            sv.CHANGES_PENDING = True
+
             if self.group_name.value in sv.GROUPS_CONFIG.keys():
                 if not npyscreen.notify_yes_no(
                         f"Group {self.group_name.value} already exists, would you like to override?",
                         title="Already Exists", editw=1):
                     return
+            sv.CHANGES_PENDING = True
             sv.GROUPS_CONFIG[self.group_name.value] = []
             for host in self.multi_host_select.values:
                 sv.GROUPS_CONFIG[self.group_name.value].append(host)

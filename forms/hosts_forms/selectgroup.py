@@ -15,6 +15,7 @@ class SelectGroup(npyscreen.ActionForm):
             sv.SELECTIONS = []
             for host in sv.GROUPS_CONFIG[self.group_selected.values[0]]:
                 sv.SELECTIONS.append(host)
+            self.parentApp.getForm('MAIN').reload_screen()
             self.parentApp.switchFormPrevious()
 
     def on_cancel(self):

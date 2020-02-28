@@ -19,6 +19,7 @@ class SelectHosts(npyscreen.ActionForm):
             sv.SELECTIONS = []
             for host in self.select_hosts_options.values:
                 sv.SELECTIONS.append(host)
+            self.parentApp.getForm('MAIN').reload_screen()
             self.parentApp.switchFormPrevious()
 
     def on_cancel(self):

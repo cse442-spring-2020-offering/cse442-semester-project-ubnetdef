@@ -17,10 +17,11 @@ from forms.selectprofile import SelectProfile
 class MainForm(npyscreen.FormWithMenus):
     def create(self):
         self.how_exited_handers[npyscreen.wgwidget.EXITED_ESCAPE] = self.exit_application
-        self.ip_selected = self.add_std(name="IP addresses Selected:")
+        self.ip_availiable = self.add_std(name="Hosts Available:")
+        self.ip_selected = self.add_std(name="Host(s) Selected:")
         self.module_selected = self.add_std(name="Selected Module")
         self.module_availiable = self.add_std(name="Modules available")
-        self.op_supported = self.add_std(name="Operating Systems Supported")
+        self.os_supported = self.add_std(name="Operating Systems Supported")
 
         self.m1 = self.add_menu(name=MAIN_MENU_TITLE)
         self.hosts_menu = self.m1.addNewSubmenu(name=REMOTE_HOSTS, shortcut="^H")
@@ -38,6 +39,7 @@ class MainForm(npyscreen.FormWithMenus):
             ("Quit", self.exit_application, "^Q"),
             ("Help", self.display_help_msg),
         ])
+        self.reload_screen()
 
     def form_exists_in_application(self, id):
         return id in self.parentApp._Forms
@@ -84,12 +86,16 @@ class MainForm(npyscreen.FormWithMenus):
                 title="No Hosts/Group Selected", wide=True, editw=1)
 
 
-        # self.module_selected.set_value(f"{method}/{module}")
+        # self.module_selected.(f"{method}/{module}")
 
     def exit_application(self):
         self.parentApp.setNextForm(None)
         self.editing = False
         self.parentApp.switchFormNow()
+
+    def reload_screen(self):
+        self.ip_availiable.set_value(", ".join(sv.HOSTS_CONFIG.keys()))
+        self.ip_selected.set_value(", ".join(sv.SELECTIONS))
 
     def run_module(self):
         pass
