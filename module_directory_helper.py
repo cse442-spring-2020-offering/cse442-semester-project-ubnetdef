@@ -1,7 +1,8 @@
 import os
 from pathlib import Path
+from .definitions import ROOT_DIR
+from overrides.constants import *
 
-dir_path_module_directory = os.path.dirname(os.path.realpath(__file__))
 remoting_method = None
 target_dir = None
 
@@ -30,13 +31,10 @@ class {module_name}(Connection{remoting_method.upper()}):
 
 
 if __name__ == '__main__':
-    list_subfolders = [file for file in os.scandir(os.path.join(dir_path_module_directory, 'modules')) if
-                       file.is_dir()]
-    name_list_subfolders = [file.name for file in list_subfolders]
-    while remoting_method not in name_list_subfolders:
-        remoting_method = input(f"Enter your remoting method [{', '.join(name_list_subfolders)}]: ").strip()
+    while remoting_method not in list_of_method_names:
+        remoting_method = input(f"Enter your remoting method [{', '.join(list_of_method_names)}]: ").strip()
     module_name = input("Module Name: ").strip()
-    target_dir = os.path.join(dir_path_module_directory, 'modules', remoting_method, module_name)
+    target_dir = os.path.join(ROOT_DIR, 'modules', remoting_method, module_name)
     try:
         create_structure(remoting_method, module_name)
     except FileExistsError:
