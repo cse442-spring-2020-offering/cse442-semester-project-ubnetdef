@@ -5,6 +5,30 @@ import overrides.shared_variables as sv
 import re
 class AddHosts(npyscreen.ActionForm):
 
+    def while_editing(self):
+        self.check_to_delete_hosts()
+    def check_to_delete_hosts(self, *args, **keywords):
+        remote_hosts = "".join(self.add_hosts_ip_addresses.value.split()).split(',')
+        if all(host in list(sv.HOSTS_CONFIG.keys()) for host in remote_hosts if host):
+            self.deleteHosts.hidden = False
+        else:
+            self.deleteHosts.hidden = True
+        self.DISPLAY()
+
+    def delete_host(self):
+        remote_hosts = "".join(self.add_hosts_ip_addresses.value.split()).split(',')
+        for host in remote_hosts:
+            if host:
+                del sv.HOSTS_CONFIG[host]
+                if host in sv.SELECTIONS: sv.SELECTIONS.remove(host)
+                for host_list in sv.GROUPS_CONFIG.values():
+                    if host in host_list: host_list.remove(host)
+        self.parentApp.getForm('MAIN').reload_screen()
+        self.parentApp.switchFormPrevious()
+
+        #TODO: Decide what to do if a group becomes empty after removing hosts
+
+
     def unhide_cred_field(self):
         self.add_hosts_username.hidden = not self.add_hosts_username.hidden
         self.add_hosts_password.hidden = not self.add_hosts_password.hidden
@@ -14,6 +38,8 @@ class AddHosts(npyscreen.ActionForm):
         self.OK_BUTTON_TEXT = SAVE_BUTTON_TEXT
         self.add_hosts_title = self.add(npyscreen.TitleText, name="Please fill in following information:", value="", editable=False, begin_entry_at=70,)
         self.add_hosts_ip_addresses = self.add(npyscreen.TitleText, name="Comma separated resolvable hostname, or ip address.", value="X.X.X.X,", editable=True, begin_entry_at=70)
+        # self.add_hosts_ip_addresses.add_handlers({ord(','): self.check_to_delete_hosts})
+        # self.add_hosts_ip_addresses.adjust_widgets = self.check_to_delete_hosts
         self.add_hosts_title = self.add(npyscreen.TitleText, name="Please select one of the availiable configuration methods:", value="",
                                         editable=False, begin_entry_at=70, )
         self.select_hosts_method = self.add(npyscreen.SelectOne, max_height=4, values=sv.list_of_method_names, scroll_exit=True, width=20)
@@ -34,10 +60,15 @@ class AddHosts(npyscreen.ActionForm):
                                       slow_scroll=True,
                                       wrap="True"
                                       )
+
+        self.deleteHosts = self.add(npyscreen.ButtonPress, name="DELETE HOST(S)", )
+        self.deleteHosts.whenPressed = self.delete_host
+        self.deleteHosts.hidden = True
+        self.check_to_delete_hosts()
+
         #TODO: Fix Resizing Issue with multiple Screens
 
         # self.add(npyscreen.ButtonPress, name="Add Additional arguments")
-
 
     @staticmethod
     def is_valid_ip_address(ip):
@@ -111,7 +142,7 @@ class AddHosts(npyscreen.ActionForm):
         for address in remote_hosts:
             if address:
                 sv.HOSTS_CONFIG[address] = {}
-                sv.HOSTS_CONFIG[address]['method'] = self.select_hosts_method.values[0]
+                sv.HOSTS_CONFIG[address]['method'] = self.select_hosts_method.get_selected_objects()[0]
                 if not self.add_hosts_username.hidden:
                     sv.HOSTS_CONFIG[address]['username'] = self.add_hosts_username.value
                     sv.HOSTS_CONFIG[address]['password'] = self.add_hosts_password.value

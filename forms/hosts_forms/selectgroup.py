@@ -9,11 +9,11 @@ class SelectGroup(npyscreen.ActionForm):
                  values=list(sv.GROUPS_CONFIG.keys()), scroll_exit=True, width=30)
 
     def on_ok(self):
-        if not self.group_selected.value:
+        if not self.group_selected.get_selected_objects():
             npyscreen.notify_confirm("Please select a group", wide=True, editw=1)
         else:
             sv.SELECTIONS = []
-            for host in sv.GROUPS_CONFIG[self.group_selected.values[0]]:
+            for host in sv.GROUPS_CONFIG[self.group_selected.get_selected_objects()[0]]:
                 sv.SELECTIONS.append(host)
             self.parentApp.getForm('MAIN').reload_screen()
             self.parentApp.switchFormPrevious()
