@@ -18,6 +18,7 @@ class MainForm(npyscreen.FormWithMenus):
     def create(self):
         self.how_exited_handers[npyscreen.wgwidget.EXITED_ESCAPE] = self.exit_application
         self.ip_availiable = self.add_std(name="Hosts Available:")
+        self.groups_availiable = self.add_std(name="Groups Available:")
         self.ip_selected = self.add_std(name="Host(s) Selected:")
         self.module_selected = self.add_std(name="Selected Module")
         self.module_availiable = self.add_std(name="Modules available")
@@ -96,6 +97,8 @@ class MainForm(npyscreen.FormWithMenus):
     def reload_screen(self):
         self.ip_availiable.set_value(", ".join(sv.HOSTS_CONFIG.keys()))
         self.ip_selected.set_value(", ".join(sv.SELECTIONS))
+        self.groups_availiable.set_value(", ".join(sv.GROUPS_CONFIG))
+        self.DISPLAY()
 
     def run_module(self):
         pass
