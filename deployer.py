@@ -1,8 +1,9 @@
 import overrides.override_add_std
 import npyscreen
-from overrides.constants import *
 from forms.mainform import MainForm
+import overrides.shared_variables as sv
 
+sv.init()
 
 class App(npyscreen.NPSAppManaged):
     def onStart(self):
