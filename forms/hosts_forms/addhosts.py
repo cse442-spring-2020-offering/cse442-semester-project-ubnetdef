@@ -111,13 +111,12 @@ class AddHosts(npyscreen.ActionForm):
         for address in remote_hosts:
             if address:
                 sv.HOSTS_CONFIG[address] = {}
+                sv.HOSTS_CONFIG[address]['method'] = self.select_hosts_method.values[0]
                 if not self.add_hosts_username.hidden:
                     sv.HOSTS_CONFIG[address]['username'] = self.add_hosts_username.value
                     sv.HOSTS_CONFIG[address]['password'] = self.add_hosts_password.value
-                    sv.HOSTS_CONFIG[address]['method'] = self.select_hosts_method.values[0]
                 if args:
                     sv.HOSTS_CONFIG[address]['args'] = args
         self.parentApp.switchFormPrevious()
-
     def on_cancel(self):
         self.parentApp.switchFormPrevious()
