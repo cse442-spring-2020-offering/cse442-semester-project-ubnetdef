@@ -29,13 +29,16 @@ class SaveProfile(npyscreen.ActionForm):
         os.makedirs(target_dir)
 
         if password is not None:
+            import bcrypt
+            salt = bcrypt.gensalt()
             sv.PROFILE_CONFIG['encrypted'] = True
+            sv.PROFILE_CONFIG['salt'] = salt.decode('utf-8')
+
             import base64
             from cryptography.hazmat.backends import default_backend
             from cryptography.hazmat.primitives import hashes
             from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
             password = password.encode()
-            salt = b'salt_'  # Acts as pepper
             kdf = PBKDF2HMAC(
                 algorithm=hashes.SHA256(),
                 length=32,

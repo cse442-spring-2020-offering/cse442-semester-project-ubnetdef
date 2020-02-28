@@ -14,7 +14,7 @@ class SelectProfile(npyscreen.ActionForm):
             f"{profile}{' (Encrypted)' if sv.profiles_properties[profile].get('encrypted') else ''}" for profile in
             sv.list_of_profile_names], scroll_exit=True, width=30)
         self.profile_password = self.add(npyscreen.TitlePassword,
-                                         name="Password to deencrypt the configuration files. (Only required for Encrypted profiles)",
+                                         name="Password to decrypt the configuration files. (Only required for Encrypted profiles)",
                                          value="", editable=True, begin_entry_at=70, )
 
     @staticmethod
@@ -26,13 +26,19 @@ class SelectProfile(npyscreen.ActionForm):
         old_hosts = deepcopy(sv.HOSTS_CONFIG)
         try:
             target_dir = os.path.join(ROOT_DIR, 'profiles', profile_name)
+
+            with open(os.path.join(target_dir, 'config.json')) as f:
+                sv.PROFILE_CONFIG = json.loads(f.read())
+
             if password is not None:
                 import base64
                 from cryptography.hazmat.backends import default_backend
                 from cryptography.hazmat.primitives import hashes
                 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+
+
                 password = password.encode()
-                salt = b'salt_'  # Acts as pepper
+                salt = sv.PROFILE_CONFIG['salt'].encode('utf-8')
                 kdf = PBKDF2HMAC(
                     algorithm=hashes.SHA256(),
                     length=32,
@@ -43,9 +49,6 @@ class SelectProfile(npyscreen.ActionForm):
                 key = base64.urlsafe_b64encode(kdf.derive(password))
                 from cryptography.fernet import Fernet
                 cipher_suite = Fernet(key)
-
-            with open(os.path.join(target_dir, 'config.json')) as f:
-                sv.PROFILE_CONFIG = json.loads(f.read())
 
             if password is not None:
                 with open(os.path.join(target_dir, 'groups.json'), 'rb') as f:
