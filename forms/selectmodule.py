@@ -6,7 +6,7 @@ class SelectModule(npyscreen.ActionForm):
     def create(self):
         self.select_group_title = self.add(npyscreen.TitleText, name="Please select one of the availiable modules",
                                            value="", editable=False, begin_entry_at=70, )
-        self.group_selected = self.add(npyscreen.SelectOne, max_height=4, values=method_to_module_map[METHOD],
+        self.group_selected = self.add(npyscreen.SelectOne, max_height=4, values=['Module1', 'Module2', 'Module3'],
                                        scroll_exit=True, width=30)
 
     def on_ok(self):
