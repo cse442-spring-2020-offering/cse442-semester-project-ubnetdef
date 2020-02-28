@@ -8,24 +8,22 @@ class AddHosts(npyscreen.ActionForm):
     def unhide_cred_field(self):
         self.add_hosts_username.hidden = not self.add_hosts_username.hidden
         self.add_hosts_password.hidden = not self.add_hosts_password.hidden
-        self.select_hosts_method.hidden = not self.select_hosts_method.hidden
         self.DISPLAY()
 
     def create(self):
         self.OK_BUTTON_TEXT = SAVE_BUTTON_TEXT
         self.add_hosts_title = self.add(npyscreen.TitleText, name="Please fill in following information:", value="", editable=False, begin_entry_at=70,)
         self.add_hosts_ip_addresses = self.add(npyscreen.TitleText, name="Comma separated resolvable hostname, or ip address.", value="X.X.X.X,", editable=True, begin_entry_at=70)
-        self.winrm_or_ssh = self.add(npyscreen.Checkbox, name="WinRM/SSH")
+        self.add_hosts_title = self.add(npyscreen.TitleText, name="Please select one of the availiable configuration methods:", value="",
+                                        editable=False, begin_entry_at=70, )
+        self.select_hosts_method = self.add(npyscreen.SelectOne, max_height=4, values=sv.list_of_method_names, scroll_exit=True, width=20)
+        self.winrm_or_ssh = self.add(npyscreen.Checkbox, name="requires credentials?")
         self.winrm_or_ssh.whenToggled = self.unhide_cred_field
-
         self.add_hosts_username = self.add(npyscreen.TitleText, name="Username", value="", editable=True, begin_entry_at=70)
         self.add_hosts_password = self.add(npyscreen.TitlePassword, name="Password", value="", editable=True, begin_entry_at=70)
-        self.select_hosts_method = self.add(npyscreen.SelectOne, max_height=4,
-                                             values=["WinRM", "SSH"], scroll_exit=True, width=20)
 
         self.add_hosts_username.hidden = True
         self.add_hosts_password.hidden = True
-        self.select_hosts_method.hidden = True
 
         self.add_hosts_optional_args_title = self.add(npyscreen.TitleText, name="Optional arguments could be added here using json format:", value="", editable=False, begin_entry_at=70)
         self.add_hosts_args= self.add(npyscreen.MultiLineEditableBoxed,
