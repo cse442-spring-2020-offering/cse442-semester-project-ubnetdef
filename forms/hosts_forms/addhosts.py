@@ -34,10 +34,36 @@ class AddHosts(npyscreen.ActionForm):
         self.add_hosts_password.hidden = not self.add_hosts_password.hidden
         self.DISPLAY()
 
+
+    def bulk_host_popup(self):
+        file= npyscreen.selectFile()
+        try:
+            with open(file, 'r') as f:
+                content = f.read()
+                content = content.replace('\r\n', '\n')
+                from detect_delimiter import detect
+                delimiter = detect(content, whitelist=['\n', ','])
+                ip_addresses = content.split(delimiter)
+                current_value = self.add_hosts_ip_addresses.get_value()
+                self.add_hosts_ip_addresses.set_value(f"{current_value}{',' if current_value[-1] != ',' else ''}{','.join(filter(None, ip_addresses))}")
+
+        except FileNotFoundError:
+            npyscreen.notify_confirm("File was not found!", title="Information Missing/Incorrect", wide=True, editw=1)
+        except PermissionError:
+            npyscreen.notify_confirm("You do not have permissions to open this file!", title="Information Missing/Incorrect", wide=True, editw=1)
+        except UnicodeDecodeError:
+            npyscreen.notify_confirm("We are unable to open the file. Make sure the file is human readable", title="Information Missing/Incorrect", wide=True, editw=1)
+        except Exception as e:
+            npyscreen.notify_confirm(f"Something went wrong, please retry, or select a different file.\nStack Trace:\n:{str(e)}",
+                                     title="Equivalent of a 500 error", wide=True, editw=1)
+        self.DISPLAY()
     def create(self):
         self.OK_BUTTON_TEXT = SAVE_BUTTON_TEXT
         self.add_hosts_title = self.add(npyscreen.TitleText, name="Please fill in following information:", value="", editable=False, begin_entry_at=70,)
         self.add_hosts_ip_addresses = self.add(npyscreen.TitleText, name="Comma separated resolvable hostname, or ip address.", value="X.X.X.X,", editable=True, begin_entry_at=70)
+        self.bulk_hosts_addition = self.add(npyscreen.ButtonPress, name="Add hosts from comma/newline separated file of hosts")
+        self.bulk_hosts_addition.whenPressed = self.bulk_host_popup
+
         # self.add_hosts_ip_addresses.add_handlers({ord(','): self.check_to_delete_hosts})
         # self.add_hosts_ip_addresses.adjust_widgets = self.check_to_delete_hosts
         self.add_hosts_title = self.add(npyscreen.TitleText, name="Please select one of the availiable configuration methods:", value="",
@@ -60,7 +86,6 @@ class AddHosts(npyscreen.ActionForm):
                                       slow_scroll=True,
                                       wrap="True"
                                       )
-
         self.deleteHosts = self.add(npyscreen.ButtonPress, name="DELETE HOST(S)", )
         self.deleteHosts.whenPressed = self.delete_host
         self.deleteHosts.hidden = True
