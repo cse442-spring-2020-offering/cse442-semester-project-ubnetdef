@@ -6,8 +6,6 @@ python:
 
 os:
   - linux
-  - windows
-  - osx
 
 before_script: pip install -r requirements.txt
 
