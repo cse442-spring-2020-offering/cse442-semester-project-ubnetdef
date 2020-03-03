@@ -8,7 +8,7 @@ matrix:
 
     - language: minimal
       os: osx
-      before_script: pip3 install -r requirements.txt
+      install: pip3 install -r requirements.txt
 
     - language: minimal
       os: windows
