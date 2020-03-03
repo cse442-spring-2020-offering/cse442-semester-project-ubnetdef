@@ -9,6 +9,10 @@ matrix:
     - language: minimal
       os: osx
       install: pip3 install -r requirements.txt
+      script:
+        - pytest
+        - python3 tests/test_launch_application.py
+
 
     - language: minimal
       os: windows
