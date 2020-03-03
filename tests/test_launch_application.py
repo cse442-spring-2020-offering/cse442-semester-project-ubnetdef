@@ -22,3 +22,4 @@ def test_successful_launch_and_exit():
 
 if __name__ == '__main__':
     test_successful_launch_and_exit()
+
