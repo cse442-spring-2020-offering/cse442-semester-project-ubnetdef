@@ -14,14 +14,15 @@ matrix:
         - python3 tests/test_launch_application.py
 
 
-    - language: minimal
-      os: windows
-      before_install:
-        - choco install python3 -y
-        - export PATH="/c/Python38:/c/Python38/Scripts:$PATH"
-      script:
-        - pytest
-        - powershell -Command python tests/test_launch_application.py
+#    - language: minimal
+#      os: windows
+#      before_install:
+#        - choco install python3 -y
+#        - export PATH="/c/Python38:/c/Python38/Scripts:$PATH"
+#      script:
+#        - pytest
+#        - powershell -Command python tests/test_launch_application.py
+
 install: pip install -r requirements.txt
 script:
   - pytest
