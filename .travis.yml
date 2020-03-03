@@ -8,11 +8,6 @@ matrix:
 
     - language: minimal
       os: osx
-      install: pip3 install -r requirements.txt
-      script:
-        - pytest
-        - python3 tests/test_launch_application.py
-
 
     - language: minimal
       os: windows
@@ -21,8 +16,11 @@ matrix:
         - export PATH="/c/Python38:/c/Python38/Scripts:$PATH"
 
 
-
-install: pip install -r requirements.txt
+install:
+  - [[ "$TRAVIS_OS_NAME" != "osx" ]]; then pip install -r requirements.txt ; fi
+  - [[ "$TRAVIS_OS_NAME" == "osx" ]]; then pip3 install -r requirements.txt ; fi
 script:
   - pytest
-  - python tests/test_launch_application.py
+  - [[ "$TRAVIS_OS_NAME" == "windows" ]]; then powershell -Command python tests/test_launch_application.py ; fi
+  - [[ "$TRAVIS_OS_NAME" == "osx" ]]; then python3 tests/test_launch_application.py ; fi
+  - [[ "$TRAVIS_OS_NAME" == "linux" ]]; then python tests/test_launch_application.py ; fi
