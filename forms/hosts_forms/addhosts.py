@@ -63,9 +63,6 @@ class AddHosts(npyscreen.ActionForm):
         self.add_hosts_ip_addresses = self.add(npyscreen.TitleText, name="Comma separated resolvable hostname, or ip address.", value="X.X.X.X,", editable=True, begin_entry_at=70)
         self.bulk_hosts_addition = self.add(npyscreen.ButtonPress, name="Add hosts from comma/newline separated file of hosts")
         self.bulk_hosts_addition.whenPressed = self.bulk_host_popup
-
-        # self.add_hosts_ip_addresses.add_handlers({ord(','): self.check_to_delete_hosts})
-        # self.add_hosts_ip_addresses.adjust_widgets = self.check_to_delete_hosts
         self.add_hosts_title = self.add(npyscreen.TitleText, name="Please select one of the availiable configuration methods:", value="",
                                         editable=False, begin_entry_at=70, )
         self.select_hosts_method = self.add(npyscreen.SelectOne, max_height=4, values=sv.list_of_method_names, scroll_exit=True, width=20)
@@ -82,7 +79,6 @@ class AddHosts(npyscreen.ActionForm):
                                       max_height=10,
                                       name='Optional Arguments in json format',
                                       footer="Press i or o to insert values, esc to exit the form",
-                                      values=[""],
                                       slow_scroll=True,
                                       wrap="True"
                                       )
@@ -142,15 +138,20 @@ class AddHosts(npyscreen.ActionForm):
             return
 
         args = None
-        if self.add_hosts_args.value:
+
+        if self.add_hosts_args.get_values():
             import json
+            import ast
             try:
-                args = json.loads(self.add_hosts_args.value)
-            except json.JSONDecodeError:
-                npyscreen.notify_confirm(
-                    f"Failed to load additional arguments. Ensure the formatting is correct",
-                    title="Information Missing/Incorrect", wide=True, editw=1)
-                return
+                args = ast.literal_eval(''.join(self.add_hosts_args.get_values()))
+            except SyntaxError:
+                try:
+                    args = json.loads(''.join(self.add_hosts_args.get_values()))
+                except json.JSONDecodeError:
+                    npyscreen.notify_confirm(
+                        f"Failed to load additional arguments. Ensure the formatting is correct",
+                        title="Information Missing/Incorrect", wide=True, editw=1)
+                    return
         for address in [x for x in remote_hosts if x]:
             if not (self.is_valid_hostname(address) or self.is_valid_ip_address(address)):
                 npyscreen.notify_confirm(
@@ -162,6 +163,7 @@ class AddHosts(npyscreen.ActionForm):
                     f"Host {address} already exists, would you like to override?",
                     title="Already Exists", editw=1):
                     return
+            #TODO switch to ini format with configparser
 
         sv.CHANGES_PENDING = True
         for address in remote_hosts:
@@ -169,10 +171,11 @@ class AddHosts(npyscreen.ActionForm):
                 sv.HOSTS_CONFIG[address] = {}
                 sv.HOSTS_CONFIG[address]['method'] = self.select_hosts_method.get_selected_objects()[0]
                 if not self.add_hosts_username.hidden:
-                    sv.HOSTS_CONFIG[address]['username'] = self.add_hosts_username.value
-                    sv.HOSTS_CONFIG[address]['password'] = self.add_hosts_password.value
+                    sv.HOSTS_CONFIG[address]['user'] = self.add_hosts_username.value
+                    sv.HOSTS_CONFIG[address]['pass'] = self.add_hosts_password.value
                 if args:
-                    sv.HOSTS_CONFIG[address]['args'] = args
+                    for key, value in args.items():
+                        sv.HOSTS_CONFIG[address][key] = value
         self.parentApp.getForm('MAIN').reload_screen()
         self.parentApp.switchFormPrevious()
     def on_cancel(self):
