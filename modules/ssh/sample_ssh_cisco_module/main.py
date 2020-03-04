@@ -1,4 +1,4 @@
 from modules.ssh.ssh import ConnectionSSH
 class SampleModule(ConnectionSSH):
     def run(self):
-        pass
+        output = self.client.run_command('whoami')

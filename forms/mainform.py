@@ -80,14 +80,15 @@ class MainForm(npyscreen.FormWithMenus):
 
     def module_selector(self):
         if sv.SELECTIONS:
+            for host in sv.SELECTIONS:
+                if sv.HOSTS_CONFIG[host]['method'] != sv.HOSTS_CONFIG[sv.SELECTIONS[0]]['method']:
+                    npyscreen.notify_confirm("Hosts do not share common remoting method", wide=True, editw=1)
+                    return
             self.switch_to_form(MODULES, SelectModule)
         else:
             npyscreen.notify_confirm(
                 "No Hosts/Group were selected. Please go to Hosts Menu, to select hosts or a group",
                 title="No Hosts/Group Selected", wide=True, editw=1)
-
-
-        # self.module_selected.(f"{method}/{module}")
 
     def exit_application(self):
         self.parentApp.setNextForm(None)
