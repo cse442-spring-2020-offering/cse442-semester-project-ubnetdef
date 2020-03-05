@@ -172,7 +172,7 @@ class AddHosts(npyscreen.ActionForm):
                 sv.HOSTS_CONFIG[address]['method'] = self.select_hosts_method.get_selected_objects()[0]
                 if not self.add_hosts_username.hidden:
                     sv.HOSTS_CONFIG[address]['user'] = self.add_hosts_username.value
-                    sv.HOSTS_CONFIG[address]['pass'] = self.add_hosts_password.value
+                    sv.HOSTS_CONFIG[address]['password'] = self.add_hosts_password.value
                 if args:
                     for key, value in args.items():
                         sv.HOSTS_CONFIG[address][key] = value
