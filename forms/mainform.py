@@ -12,6 +12,7 @@ from forms.hosts_forms.selecthosts import SelectHosts
 from forms.hosts_forms.selectgroup import SelectGroup
 from forms.saveprofile import SaveProfile
 from forms.selectprofile import SelectProfile
+from forms.runnerform import Run
 
 
 class MainForm(npyscreen.FormWithMenus):
@@ -99,10 +100,20 @@ class MainForm(npyscreen.FormWithMenus):
         self.ip_availiable.set_value(", ".join(sv.HOSTS_CONFIG.keys()))
         self.ip_selected.set_value(", ".join(sv.SELECTIONS))
         self.groups_availiable.set_value(", ".join(sv.GROUPS_CONFIG))
+        self.module_selected.set_value(sv.MODULE)
         self.DISPLAY()
 
     def run_module(self):
-        pass
+        if sv.SELECTIONS and sv.MODULE is not None:
+            for host in sv.SELECTIONS:
+                if sv.HOSTS_CONFIG[host]['method'] != sv.HOSTS_CONFIG[sv.SELECTIONS[0]]['method']:
+                    npyscreen.notify_confirm("Hosts do not share common remoting method", wide=True, editw=1)
+                    return
+            self.switch_to_form(RUN, Run)
+        else:
+            npyscreen.notify_confirm(
+                "No Hosts, or no Modules were selected",
+                title="No Hosts/Modules selected", wide=True, editw=1)
 
     def display_help_msg(self):
 
