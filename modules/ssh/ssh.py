@@ -15,9 +15,11 @@ class ConnectionSSH():
     def run(self):
         pass # This method is meant to be overridden
 
-    # def version_detection(self):
-    #     pass
-    #     output = self.client.run_command('uname')
-    #     for host, host_output in output.items():
-    #         for line in host_output.stdout:
-    #             print(line)
+    def version_detection(self):
+        output = self.client.run_command('uname')
+        for host, host_output in output.items():
+            for line in host_output.stdout:
+                print(line)
+
+    def handler(self):
+        pass
