@@ -16,10 +16,10 @@ class ConnectionSSH():
         pass # This method is meant to be overridden
 
     def version_detection(self):
-        output = self.client.run_command('uname')
-        for host, host_output in output.items():
-            for line in host_output.stdout:
-                print(line)
+        version_detection_hosts = (host for host in sv.SELECTION if
+                                   sv.HOSTS_CONFIG[host].get('version_detection', True))
+        output = self.client.run_command('cat /etc/*release', host_args=version_detection_hosts)
 
     def handler(self):
-        pass
+        self.version_detection()
+        self.run()
