@@ -21,5 +21,5 @@ class ConnectionSSH():
         output = self.client.run_command('cat /etc/*release', host_args=version_detection_hosts)
 
     def handler(self):
-        self.version_detection()
+        # self.version_detection()
         self.run()
