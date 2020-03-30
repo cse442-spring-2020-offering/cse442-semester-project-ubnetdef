@@ -9,7 +9,7 @@ Ensure Following requirements are satisfied:
 
 Run following to install the required packages:
 
-`python3 -m pip install -r requirements.txt`
+`python -m pip install -r requirements.txt`
 
 To run the deployer type following:
 
