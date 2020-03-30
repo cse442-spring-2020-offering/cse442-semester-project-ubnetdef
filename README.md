@@ -15,4 +15,4 @@ To run the deployer type following:
 
 `python deployer.py`
 
-Note: Sometimes `pyton` may point to python2, so you might have to explicitly run `python3 deployer.py` to run the deployer
+Note: Sometimes `python` may point to python2, so you might have to explicitly run `python3 deployer.py` to run the deployer
