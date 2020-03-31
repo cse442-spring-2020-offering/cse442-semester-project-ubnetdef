@@ -3,7 +3,7 @@ from definitions import ROOT_DIR
 import json
 
 def load_methods_and_modules():
-    global list_of_method_names, list_of_method_names, method_to_module_map
+    global list_of_method_names, method_to_module_map
     list_of_method_subfolders = [file for file in os.scandir(os.path.join(ROOT_DIR, 'modules')) if file.is_dir()]
     list_of_method_names = []
     method_to_module_map = {}
