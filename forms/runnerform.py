@@ -17,7 +17,10 @@ class Run(npyscreen.SplitForm):
         class_name = defined_classes[0]
         class_to_run = getattr(module, class_name)
         class_instance = class_to_run()
-        class_instance.handler()
+        try:
+            class_instance.handler()
+        except Exception as e:
+            npyscreen.notify_confirm(str(e), title="An error occurred when executing the module", wide=True, editw=1)
         self.DISPLAY()
 
     def create(self):
