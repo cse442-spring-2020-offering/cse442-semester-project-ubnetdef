@@ -1,5 +1,6 @@
 import os
 from definitions import ROOT_DIR
+import threading
 import json
 
 def load_methods_and_modules():
@@ -28,13 +29,15 @@ def load_profiles():
                 continue
 
 def init():
-    global HOSTS_CONFIG, GROUPS_CONFIG, PROFILE_CONFIG, SELECTIONS, CHANGES_PENDING, list_of_method_names, method_to_module_map, list_of_method_subfolders, list_of_profiles_subfolders, list_of_profile_names, profiles_properties, MODULE, METHOD
+    global HOSTS_CONFIG, GROUPS_CONFIG, PROFILE_CONFIG, SELECTIONS, CHANGES_PENDING, list_of_method_names, method_to_module_map, list_of_method_subfolders, list_of_profiles_subfolders, list_of_profile_names, profiles_properties, MODULE, METHOD, UPDATE_STATUS, lock
+    lock = threading.Lock()
     MODULE = None
     METHOD = None
     HOSTS_CONFIG = {}
     GROUPS_CONFIG = {}
     PROFILE_CONFIG = {}
     SELECTIONS = []
+    UPDATE_STATUS = {}
     CHANGES_PENDING = False
     list_of_method_names = []
     method_to_module_map = {}
