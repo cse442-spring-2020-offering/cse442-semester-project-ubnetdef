@@ -1,7 +1,8 @@
 import npyscreen
+from overrides.Mixins import FormMixin
 
 
-class PlaceHolderForm(npyscreen.ActionForm):
+class PlaceHolderForm(FormMixin, npyscreen.ActionForm):
     def create(self):
         self.add_std(npyscreen.TitleText, name="This is a sample Form. Click OK to go back")
 

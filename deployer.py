@@ -1,4 +1,4 @@
-import overrides.override_add_std
+import overrides.Mixins
 import npyscreen
 from forms.mainform import MainForm
 import overrides.shared_variables as sv

@@ -47,3 +47,6 @@ def init():
     profiles_properties = {}
     load_profiles()
     load_methods_and_modules()
+
+
+    #Look into making this a public Object, and pass around the object
