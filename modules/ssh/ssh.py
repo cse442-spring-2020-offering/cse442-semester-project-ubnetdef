@@ -1,7 +1,8 @@
 from pssh.clients import ParallelSSHClient
 import overrides.shared_variables as sv
+import os
 import pathlib
-
+from gevent import joinall
 class ConnectionSSH():
     def __init__(self):
         host_config = {}
@@ -18,14 +19,14 @@ class ConnectionSSH():
 
     def command(self, command, *args, **kwargs):
         output = self.client.run_command(command, *args, **kwargs)
-        return logger(output, f"Command ran: {comment}\n")
+        return self.logger(output, f"Command ran: {command}\n")
 
     def upload_file(self, file_name, remote_path, *args, **kwargs):
         path = pathlib.Path(__file__).parent.absolute()
-        target_dir = os.path.join(path, 'file', file_name)
-        print(target_dir)
-        # output = client.copy_file(target_dir, remote_path, *args, **kwargs)
-        # return logger(output, f"File upload: {local_path} to {remote_path}")
+        target_dir = os.path.join(path, sv.MODULE, 'files',  file_name)
+        greenlets = self.client.copy_file(target_dir, remote_path, *args, **kwargs)
+
+        joinall(greenlets, raise_error=True)
 
     def logger(self, output, comment = ''):
         with sv.lock:
