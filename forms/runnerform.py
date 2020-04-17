@@ -7,17 +7,21 @@ import threading
 
 class Run(npyscreen.ActionFormV2):
     SKIP_STATUS_UPDATE = False
+    module = None
     def run(self):
         module_name = f"modules.{sv.METHOD}.{sv.MODULE}.main"
-        module = importlib.import_module(module_name)
-        defined_classes = [m[0] for m in inspect.getmembers(module, inspect.isclass) if m[1].__module__ == module_name]
+        # if self.module is not None:
+        #     importlib.reload(module)
+        # else:
+        self.module = importlib.import_module(module_name)
+        defined_classes = [m[0] for m in inspect.getmembers(self.module, inspect.isclass) if m[1].__module__ == module_name]
         if len(defined_classes) != 1:
             npyscreen.notify_confirm("Module constructed incorrectly, one and  only one class should exist in main.py",
                                      wide=True, editw=1)
             return
         try:
             class_name = defined_classes[0]
-            class_to_run = getattr(module, class_name)
+            class_to_run = getattr(self.module, class_name)
             class_instance = class_to_run()
         except Exception as e:
             npyscreen.notify_confirm(str(e), title="Module Import Error", wide=True, editw=1)
