@@ -1,5 +1,6 @@
 from pssh.clients import ParallelSSHClient
-import overrides.shared_variables as sv 
+import overrides.shared_variables as sv
+import pathlib
 
 class ConnectionSSH():
     def __init__(self):
@@ -17,9 +18,19 @@ class ConnectionSSH():
 
     def command(self, command, *args, **kwargs):
         output = self.client.run_command(command, *args, **kwargs)
+        return logger(output, f"Command ran: {comment}\n")
+
+    def upload_file(self, file_name, remote_path, *args, **kwargs):
+        path = pathlib.Path(__file__).parent.absolute()
+        target_dir = os.path.join(path, 'file', file_name)
+        print(target_dir)
+        # output = client.copy_file(target_dir, remote_path, *args, **kwargs)
+        # return logger(output, f"File upload: {local_path} to {remote_path}")
+
+    def logger(self, output, comment = ''):
         with sv.lock:
             for host, host_output in output.items():
-                ret_string = f"Command ran: {command}\n"
+                ret_string = comment
                 ret_string += "Output:\n" + '\n'.join(filter(None, host_output.stdout))
                 ret_string += f"\nStatus Code: {str(host_output.exit_code)}\n\n"
                 if host in sv.UPDATE_STATUS:
