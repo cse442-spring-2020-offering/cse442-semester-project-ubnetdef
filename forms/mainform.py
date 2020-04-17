@@ -14,8 +14,9 @@ from forms.saveprofile import SaveProfile
 from forms.selectprofile import SelectProfile
 from forms.runnerform import Run
 
+from overrides.Mixins import FormMixin
 
-class MainForm(npyscreen.FormWithMenus):
+class MainForm(FormMixin, npyscreen.FormWithMenus):
     def create(self):
         self.how_exited_handers[npyscreen.wgwidget.EXITED_ESCAPE] = self.exit_application
         self.ip_availiable = self.add_std(name="Hosts Available:")

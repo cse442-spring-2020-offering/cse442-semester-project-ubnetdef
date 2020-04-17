@@ -1,9 +1,10 @@
 import os
 from definitions import ROOT_DIR
+import threading
 import json
 
 def load_methods_and_modules():
-    global list_of_method_names, list_of_method_names, method_to_module_map
+    global list_of_method_names, method_to_module_map
     list_of_method_subfolders = [file for file in os.scandir(os.path.join(ROOT_DIR, 'modules')) if file.is_dir()]
     list_of_method_names = []
     method_to_module_map = {}
@@ -28,13 +29,15 @@ def load_profiles():
                 continue
 
 def init():
-    global HOSTS_CONFIG, GROUPS_CONFIG, PROFILE_CONFIG, SELECTIONS, CHANGES_PENDING, list_of_method_names, method_to_module_map, list_of_method_subfolders, list_of_profiles_subfolders, list_of_profile_names, profiles_properties, MODULE, METHOD
+    global HOSTS_CONFIG, GROUPS_CONFIG, PROFILE_CONFIG, SELECTIONS, CHANGES_PENDING, list_of_method_names, method_to_module_map, list_of_method_subfolders, list_of_profiles_subfolders, list_of_profile_names, profiles_properties, MODULE, METHOD, UPDATE_STATUS, lock
+    lock = threading.Lock()
     MODULE = None
     METHOD = None
     HOSTS_CONFIG = {}
     GROUPS_CONFIG = {}
     PROFILE_CONFIG = {}
     SELECTIONS = []
+    UPDATE_STATUS = {}
     CHANGES_PENDING = False
     list_of_method_names = []
     method_to_module_map = {}
@@ -44,3 +47,6 @@ def init():
     profiles_properties = {}
     load_profiles()
     load_methods_and_modules()
+
+
+    #Look into making this a public Object, and pass around the object
