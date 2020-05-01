@@ -78,6 +78,11 @@ class ConnectionSSH():
                     match+=1
             if match != len(constraints.keys()):
                 unmatched_hosts.append(host)
+
+        with sv.lock:
+            for host in unmatched_hosts:
+                sv.UPDATE_STATUS[host] = f"The host did not match version detection.\nHost parameters are:{json.dumps(self.VERSION)}\nRequired parameters are:{json.dumps(constraints)}"
+
         executable_hosts = [host for host in sv.SELECTIONS if host not in unmatched_hosts]
         self.client = self.generate_client(executable_hosts)
 
