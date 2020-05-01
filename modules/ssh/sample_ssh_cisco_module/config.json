@@ -1,7 +1,5 @@
 {
-  "os": ["Ubuntu", "RedHat"],
-  "distribution":
-  {
-    "RedHat": ["CentOS"]
-  }
+  "constraints": {
+    "NAME": ["Ubuntu", "RedHat"]
+    }
 }
