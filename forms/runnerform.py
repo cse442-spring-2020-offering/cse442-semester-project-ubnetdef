@@ -4,16 +4,21 @@ import overrides.shared_variables as sv
 import importlib
 import inspect
 import threading
+from importlib import reload
 
 class Run(npyscreen.ActionFormV2):
     SKIP_STATUS_UPDATE = False
-    module = None
     def run(self):
+
+        module_name_parrent = f"modules.{sv.METHOD}.{sv.MODULE}"
+        self.module_parrent = importlib.import_module(module_name_parrent)
         module_name = f"modules.{sv.METHOD}.{sv.MODULE}.main"
-        # if self.module is not None:
-        #     importlib.reload(module)
-        # else:
         self.module = importlib.import_module(module_name)
+
+        # importlib.reload(self.module_parrent)
+        # importlib.reload(self.module)
+
+
         defined_classes = [m[0] for m in inspect.getmembers(self.module, inspect.isclass) if m[1].__module__ == module_name]
         if len(defined_classes) != 1:
             npyscreen.notify_confirm("Module constructed incorrectly, one and  only one class should exist in main.py",
@@ -35,8 +40,9 @@ class Run(npyscreen.ActionFormV2):
                 class_instance.handler()
             except Exception as e:
                 self.SKIP_STATUS_UPDATE = True
-                npyscreen.notify_confirm(str(e), title="Module Execution Error", wide=True, editw=1)
-                self.SKIP_STATUS_UPDATE = False
+                # npyscreen.notify_confirm(str(e), title="Module Execution Error", wide=True, editw=1)
+                # self.SKIP_STATUS_UPDATE = False
+                self.status_field.value = str(e)
             self._added_buttons['ok_button'].hidden = False
             self._added_buttons['cancel_button'].hidden = False
             self.DISPLAY()
