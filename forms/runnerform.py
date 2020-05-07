@@ -5,6 +5,7 @@ import importlib
 import inspect
 import threading
 from importlib import reload
+import traceback
 
 class Run(npyscreen.ActionFormV2):
     SKIP_STATUS_UPDATE = False
@@ -21,7 +22,7 @@ class Run(npyscreen.ActionFormV2):
 
         defined_classes = [m[0] for m in inspect.getmembers(self.module, inspect.isclass) if m[1].__module__ == module_name]
         if len(defined_classes) != 1:
-            npyscreen.notify_confirm("Module constructed incorrectly, one and  only one class should exist in main.py",
+            npyscreen.notify_confirm("Module constructed incorrectly, one and only one class should exist in main.py",
                                      wide=True, editw=1)
             return
         try:
@@ -38,11 +39,14 @@ class Run(npyscreen.ActionFormV2):
         def thread_runner():
             try:
                 class_instance.handler()
-            except Exception as e:
+            except Exception:
                 self.SKIP_STATUS_UPDATE = True
                 # npyscreen.notify_confirm(str(e), title="Module Execution Error", wide=True, editw=1)
                 # self.SKIP_STATUS_UPDATE = False
-                self.status_field.value = str(e)
+
+                self.status_field.values = str(traceback.format_exc()).split('\n')
+                self.status_field.set_editable(true)
+
             self._added_buttons['ok_button'].hidden = False
             self._added_buttons['cancel_button'].hidden = False
             self.DISPLAY()
@@ -52,7 +56,7 @@ class Run(npyscreen.ActionFormV2):
 
     def create(self):
         self.host_selected = self.add(npyscreen.SelectOne, max_width=40, max_height=40, values=sv.SELECTIONS, scroll_exit=True, width=30)
-        self.status_field = self.add(npyscreen.MultiLineEdit, value="""Select a host to get a real time update of that host!""", relx=50, rely=2, max_width=80, values=sv.SELECTIONS, width=30, editable=False)
+        self.status_field = self.add(npyscreen.BufferPager, autowrap=True, values=["Select a host to get a real time update of that host!"], relx=50, rely=2,editable=False)
         self.keypress_timeout = 100
 
     def while_waiting(self, *args, **kwargs):
@@ -69,8 +73,9 @@ class Run(npyscreen.ActionFormV2):
             return
         if host_to_update:
             with sv.lock:
-                self.status_field.value = sv.UPDATE_STATUS.get(host_to_update, "No status update yet!")
+                self.status_field.values = sv.UPDATE_STATUS.get(host_to_update, "No status update yet!").split('\n')
                 self.DISPLAY()
+
 
     def on_ok(self):
         self.run()
