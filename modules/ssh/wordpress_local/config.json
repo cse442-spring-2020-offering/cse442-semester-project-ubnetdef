@@ -1,0 +1,6 @@
+{
+  "constraints": {
+    "NAME": ["Ubuntu"],
+    "DISTRIB_RELEASE": ["18.04"]
+    }
+}
